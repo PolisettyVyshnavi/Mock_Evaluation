@@ -1,0 +1,84 @@
+# ⏱️ AI-Powered Daily Time Tracking & Analytics Dashboard  
+
+A smart, responsive web application that helps users track how they spend their daily 24 hours and analyze their day using beautiful visual charts.  
+Built using **HTML, CSS, JavaScript, Firebase Auth, Firestore, and Chart.js**, with UI and code enhanced through AI tools.
+
+---
+
+## Project Overview  
+
+This project enables users to log their daily activities, ensure the total time does not exceed 24 hours, and then view analytics for any selected date.  
+It includes:
+
+- Firebase Authentication  
+- Firebase Firestore storage  
+- Daily activity tracking  
+- Pie/Bar chart analytics  
+- No-data UI state  
+- Fully responsive design  
+- Clean, well-structured architecture  
+- AI-assisted UI & code development  
+
+---
+
+## Features  
+
+### **1. User Authentication**
+- Login & Signup using Firebase Auth  
+- Allows only authenticated users to access time tracking  
+- Automatic redirection for logged-in/out states  
+
+### **2. Activity Logging**
+- Enter activities for a selected date  
+- Add:
+  - Activity Name  
+  - Category (Work, Study, Sleep, etc.)  
+  - Duration (in minutes)  
+- Remaining minutes indicator  
+- Edit/Delete activities  
+- Prevents exceeding **1440 minutes (24 hours)**  
+
+### **3. Analytics Dashboard**
+- Date picker to select any day  
+- If data exists:
+  - Pie Chart of time per category  
+  - Bar Chart of activity durations  
+  - Total time summary  
+  - Number of activities  
+- If no data exists:
+  - Beautiful “No Data Available” screen  
+  - CTA button to start logging  
+
+### **4. Realtime Sync**
+- All updates reflect instantly due to Firestore realtime listeners  
+
+###  **5. Fully Responsive UI**
+- Mobile-first layout  
+- Smooth animations  
+- Clean typography + spacing  
+
+---
+
+##  AI Usage (Mandatory Requirement)  
+
+AI tools were used in the following areas:
+
+### **UI Design**
+- Used AI tools like ChatGPT & V0.dev for generating UI layouts  
+- AI-assisted color palette selection  
+- AI-generated icons/illustrations  
+
+### 🔹 **Code Assistance**
+- ChatGPT helped generate:
+  - Form validation logic  
+  - Firebase CRUD operations  
+  - Chart.js configuration  
+  - Responsive CSS  
+
+### **Documentation**
+- README, comments, and walkthrough text created using AI  
+
+---
+
+
+
