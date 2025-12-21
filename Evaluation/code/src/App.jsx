@@ -7,7 +7,7 @@ const AppContent=()=>{
     const{posts}=useContext(PostContext);
     const{theme,toggleTheme}=useContext(ThemeContext);
     return(
-        <div>
+        <div className={`app ${theme}`}>
             <header>
                 <h1>Post Manager</h1>
                 <button onClick={toggleTheme}>Switch Theme</button>
