@@ -3,7 +3,7 @@ import React, { memo } from "react";
 const FleetCard = memo(({ fleet, onUpdateDriver, onToggleStatus, onDelete }) => {
   return (
     <div style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "5px" }}>
-      <img src="https://via.placeholder.com/150" alt="vehicle" style={{ width: "100%" }} />
+     
       <h3>{fleet.regNo}</h3>
       <p>Category: {fleet.category}</p>
       <p>Driver: {fleet.driver}</p>
