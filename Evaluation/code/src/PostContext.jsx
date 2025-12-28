@@ -12,7 +12,7 @@ export const PostProvider=({children})=>{
     const updatePost=(id,updatedTitle,updatedBody)=>{
         setPosts(prevPosts=>
             prevPosts.map(post=>
-                post.id===id?{...PostContext.post,title:updatedTitle,body:updatedBody}:post
+                post.id === id ? { ...post, title: updatedTitle, body: updatedBody } : post
             )
         )
     };

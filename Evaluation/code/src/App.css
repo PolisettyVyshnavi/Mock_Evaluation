@@ -1,11 +1,11 @@
-.app-container{
+.app{
   min-height: 100vh;
   padding: 20px;
   transition: 0.3s;
 }
 .light{
   background-color: #ffff;
-  color: #0000;
+  color: #000000;
 }
 .dark{
   background-color: #121212;
@@ -25,3 +25,4 @@
   border-color: #444;
   background-color: #1e1e1e;
 }
+
