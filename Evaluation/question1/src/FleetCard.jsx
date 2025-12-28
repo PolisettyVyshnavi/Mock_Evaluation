@@ -1,16 +1,19 @@
 import React,{memo} from "react";
-const FleetCard=memo(({fleet,onUpate,onToggle,onDelete})=>{
+const FleetCard=memo(({fleet,onUpateDriver,onToggleStatus,onDelete})=>{
     return(
-        <div className="card">
-            <img src="https://viaa.placeholder.com/150" alt="vehicle" />
-            <p>{fleet.regNo}</p>
-            <p>{fleet.category}</p>
-            <p>{fleet.driver}</p>
-            <p>{fleet.status}</p>
-            <button onClick={()=>onUpate(fleet.id)}>UpdateDriver</button>
-            <button onClick={()=>onToggle(fleet.id)}>Toogle Status</button>
-             <button onClick={()=>onDelete(fleet.id)}>Delete</button>
+        <div style={{border:"'1px solid #ccc", padding:"'10px",borderRadius:"5px"}}>
+            <img src="https://via.placeholder.com/150" alt="vehicle" style={{width:"100%"}}/>
+            <h3>{fleet.regNo}</h3>
+            <p>Category:{fleet.category}</p>
+            <p>Driver:{fleet.driver}</p>
+            <p>Status:{fleet.status}</p>
+            <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
+                <button onClick={()=>onUpateDriver(fleet.id)}>UpdateDriver</button>
+                <button onClick={()=>onToggleStatus(fleet.id)}>Toogle Status</button>
+                <button onClick={()=>onDelete(fleet.id)}style={{color:"red"}}>Delete</button>
+            </div>
         </div>
+
     )
 })
 export default FleetCard;

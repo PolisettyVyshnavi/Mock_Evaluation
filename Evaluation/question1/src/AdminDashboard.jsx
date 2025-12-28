@@ -1,4 +1,15 @@
-import { useCallback } from "react";
+import {useState, useCallback } from "react";
+import FleetCard from "./FleetCard";
+const AdminDashboard=()=>{
+    const[fleet,setFleets]=useState([]);
+    const[form,setForm]=useState({regNo:"",category:'Car',driver:'',status:"Available"});
+    const handleAddFleet=(e)=>{
+        e.preventDefault();
+        if(!form.regNo||!form.driver)
+            return 
+        setFleets(prev=>[...prev,{...form,id:Date.now()}])
+        setForm({regNo:"",category:"Car",driver:"",status:"Avaialble"})
+    };
 
 const updateDriver=useCallback((id)=>{
     const newName=prompt("Enter new driver name:");
@@ -6,12 +17,44 @@ const updateDriver=useCallback((id)=>{
     setFleets(perv=>perv.map(f=>f.id===id?{...f,driver:newName}:f))
 }
 },[]);
-const toggleAvailablity=useCallback((id)=>{
+const toggleStatus=useCallback((id)=>{
     setFleets(prev=>prev.map(f=>f.id===id?{...f,status:f.status==="Available"?"Unavailable":"Available"}:f));
 },[]);
-const deleteVehicle=useCallback((id)=>{
+const deleteFleet=useCallback((id)=>{
     if(window.confirm("Conform deletion?")){
     setFleets(prev=>prev.filter(f=>f.id!==id));
 }
 },[])
+return(
+    <div>
+        <nav style={{padding:"10px",background:"#eee"}}>Navbar</nav>
+        <div style={{display:'flex'}}>
+            <aside style={{width:"250px",padding:"10px"}}>
+                <h3>Add Fleet</h3>
+                <form onSubmit={handleAddFleet}>
+                    <input placeholder="Reg No" value={form.regNo} onChange={e=> setForm({...form,regNo:e.target.value})} required />
+                    <select value={form.category} onChange={e=>setForm({...form,category:e.target.value})}>
+                        <option>Auto</option>
+                        <option>Car</option>
+                        <option>Truck</option>
+                        <option>Bus</option>
+                    </select>
+                    <input placeholder="Driver" value={form.driver} onChange={e=>setForm({...form,driver:e.target.value})} required/>
+                    <select value={form.status} onChange={e=>setForm({...form,status:e.target.value})}>
+                        <option>Available</option>
+                        <option>Unavaiable</option>
+                    </select>
+                    <button type="submit">Add Fllet</button>
+                </form>
+            </aside>
+            <main style={{flex:1,padding:"10px",display:"grid",gridTemplateColumns:'repeat(3,1fr)',gap:"10px"}}>
+                {fleets.map(f=>(
+                    <FleetCard key={f.id} fleet={f}
+                    onUpdate={updateDriver} onToggle={toggleStatus}onDelete={deleteFleet}/>
+                ))}
+            </main>
+        </div>
+    </div>
+)
+}
 export default AdminDashboard;
