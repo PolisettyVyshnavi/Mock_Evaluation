@@ -27,7 +27,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
     <div style={{ padding: '20px' }}>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        {/* value and onChange MUST be present to type letters */}
+      
         <input 
           ref={emailRef} 
           type="email" 
