@@ -1,5 +1,5 @@
 import {useState, useCallback } from "react";
-import FleetCard from "./FleetCard";
+import FleetCard from "./components/FleetCard";
 const AdminDashboard=()=>{
     const[fleet,setFleets]=useState([]);
     const[form,setForm]=useState({regNo:"",category:'Car',driver:'',status:"Available"});

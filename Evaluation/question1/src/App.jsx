@@ -1,7 +1,7 @@
 import React,{ useState } from "react";
 import { Routes,Route,Navigate } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import ProtectedRoute from "./ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./AdminDashboard";
 function App(){
   const [isAuthenticated,setIsAuthenticated]=useState(false);
