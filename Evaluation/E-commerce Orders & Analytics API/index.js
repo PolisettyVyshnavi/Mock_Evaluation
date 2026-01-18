@@ -6,7 +6,6 @@ import analyticsRoutes from "./routes/analytics.routes.js";
 const app = express();
 app.use(express.json());
 
-// Mount routers
 app.use("/products", productsRoutes);
 app.use("/orders", ordersRoutes);
 app.use("/analytics", analyticsRoutes);
