@@ -1,0 +1,21 @@
+import express from "express";
+import productsRoutes from "./routes/products.routes.js";
+import ordersRoutes from "./routes/orders.routes.js";
+import analyticsRoutes from "./routes/analytics.routes.js";
+
+const app = express();
+app.use(express.json());
+
+// Mount routers
+app.use("/products", productsRoutes);
+app.use("/orders", ordersRoutes);
+app.use("/analytics", analyticsRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the E-commerce Orders & Analytics API!");
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
