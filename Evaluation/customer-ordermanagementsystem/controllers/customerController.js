@@ -1,19 +1,41 @@
-const {createClient} =require('@supabase/supabase-js')
-const supabase=createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY) 
-exports.registerCustomer=async (req,res)=>{
-    const {data,error}=await
-    supabase.from('customers').insert ([req.body]).select();
-    if(error){
-        if(error.code==="23505") return
-    res.status(409).json({error:"Email already registered"})
-        return res.status(500).json({error:error.message})
-    }
-res.status(201).json(data[0])
-}
+const supabase = require("../supabaseClient");
 
-exports.deleteCustomer=async (req,res)=>{
-    const {error} = await 
-    supabase.from('customers').delete().eq('id',customerId)
-    if (error) return res.status(500).ison({error:error.message})
-        res.json({message:"Customer and all associated orders deleted"})
-}
+exports.registerCustomer = async (req, res) => {
+  const { full_name, email, phone } = req.body;
+
+  // Check duplicate email
+  const { data: existing } = await supabase
+    .from("customers")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  if (existing) {
+    return res.status(409).json({ error: "Email already registered" });
+  }
+
+  const { data, error } = await supabase.from("customers").insert([
+    { full_name, email, phone }
+  ]);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  res.status(201).json({ message: "Customer registered successfully", data });
+};
+
+exports.deleteCustomer = async (req, res) => {
+  const { customerId } = req.params;
+
+  const { error } = await supabase
+    .from("customers")
+    .delete()
+    .eq("id", customerId);
+
+  if (error) {
+    return res.status(400).json({ error: "Invalid customer ID" });
+  }
+
+  res.json({ message: "Customer and related orders deleted (cascade)" });
+};

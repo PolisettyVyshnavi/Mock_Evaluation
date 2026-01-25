@@ -1,34 +1,97 @@
-const {createClient} =require('@supabase/supabase-js')
-const supabase=createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY) 
+const supabase = require("../supabaseClient");
 
-exports.addOrder=async (req,res)=>{
-    const {product_name,quantity,price,customerId}=req.body;
-    const {data,error}=await
-    supabase.from('orders').insert ([product_name,quantity,price,customerId]).select();
-    if(error)
-    res.status(201).json(data[0])
-}
+exports.addOrder = async (req, res) => {
+  const { product_name, quantity, price, customerId } = req.body;
 
-exports.getOrdersByCustomer=async (req,res)=>{
-    const {data,error}=await
-    supabase.from('orders').select('*').eq('customer_id',req.params.customerId);
-    if(error)
-    res.status(500).json({error:error.message})
-    if(!data.length) return res.status(404).json({error:"No orders found for this customer"});
-    res.json(data[0])
-}
+  // Check customer exists
+  const { data: customer } = await supabase
+    .from("customers")
+    .select("id")
+    .eq("id", customerId)
+    .single();
 
-exports.updateOrders=async (req,res)=>{
-    const {data,error}=await
-    supabase.from('orders').update(req.body).eq('id',req.params.orderId).select();
-    if(error || !data.length) 
-    return res.status(404).json({error:"Orders not found"});
-    res.json(data[0])
-}
+  if (!customer) {
+    return res.status(404).json({ error: "Customer not found" });
+  }
 
-exports.deleteCustomer=async (req,res)=>{
-    const {error} = await 
-    supabase.from('orders').delete().eq('id',req.params.orderId)
-    if (error) return res.status(500).ison({error:error.message})
-        res.json({message:"Orders deleted successfully"});
-}
+  const { data, error } = await supabase.from("orders").insert([
+    {
+      product_name,
+      quantity,
+      price,
+      customer_id: customerId
+    }
+  ]);
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.status(201).json({ message: "Order added", data });
+};
+
+exports.getMyOrders = async (req, res) => {
+  const { customerId } = req.params;
+
+  const { data: customer } = await supabase
+    .from("customers")
+    .select("id")
+    .eq("id", customerId)
+    .single();
+
+  if (!customer) {
+    return res.status(404).json({ error: "Customer not found" });
+  }
+
+  const { data, error } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("customer_id", customerId);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  res.json(data);
+};
+
+exports.updateOrder = async (req, res) => {
+  const { orderId } = req.params;
+  const { quantity, price, order_status } = req.body;
+
+  const { data: order } = await supabase
+    .from("orders")
+    .select("*")
+    .eq("id", orderId)
+    .single();
+
+  if (!order) {
+    return res.status(404).json({ error: "Order not found" });
+  }
+
+  const { data, error } = await supabase
+    .from("orders")
+    .update({ quantity, price, order_status })
+    .eq("id", orderId);
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.json({ message: "Order updated", data });
+};
+
+exports.deleteOrder = async (req, res) => {
+  const { orderId } = req.params;
+
+  const { error } = await supabase
+    .from("orders")
+    .delete()
+    .eq("id", orderId);
+
+  if (error) {
+    return res.status(400).json({ error: "Invalid order ID" });
+  }
+
+  res.json({ message: "Order deleted" });
+};
