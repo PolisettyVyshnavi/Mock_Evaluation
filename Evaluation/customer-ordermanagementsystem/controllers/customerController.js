@@ -1,41 +1,90 @@
-const supabase = require("../supabaseClient");
+const supabase = require("../supabaseClient.js");
 
+/**
+ * Register a new customer
+ * POST /api/register
+ */
 exports.registerCustomer = async (req, res) => {
-  const { full_name, email, phone } = req.body;
+  try {
+    const { full_name, email, phone } = req.body;
 
-  // Check duplicate email
-  const { data: existing } = await supabase
-    .from("customers")
-    .select("*")
-    .eq("email", email)
-    .single();
+    // Check for duplicate email
+    const { data: existingCustomer, error: findError } = await supabase
+      .from("customers")
+      .select("id")
+      .eq("email", email)
+      .single();
 
-  if (existing) {
-    return res.status(409).json({ error: "Email already registered" });
+    if (existingCustomer) {
+      return res.status(409).json({
+        error: "Email already registered"
+      });
+    }
+
+    // Insert new customer
+    const { data, error } = await supabase
+      .from("customers")
+      .insert([
+        {
+          full_name,
+          email,
+          phone
+        }
+      ])
+      .select(); // return inserted row
+
+    if (error) {
+      return res.status(500).json({
+        error: error.message
+      });
+    }
+
+    res.status(201).json({
+      message: "Customer registered successfully",
+      data
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error"
+    });
   }
-
-  const { data, error } = await supabase.from("customers").insert([
-    { full_name, email, phone }
-  ]);
-
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
-
-  res.status(201).json({ message: "Customer registered successfully", data });
 };
 
+/**
+ * Delete a customer (CASCADE DELETE orders)
+ * DELETE /api/delete-customer/:customerId
+ */
 exports.deleteCustomer = async (req, res) => {
-  const { customerId } = req.params;
+  try {
+    const { customerId } = req.params;
 
-  const { error } = await supabase
-    .from("customers")
-    .delete()
-    .eq("id", customerId);
+    const { data, error } = await supabase
+      .from("customers")
+      .delete()
+      .eq("id", customerId)
+      .select();
 
-  if (error) {
-    return res.status(400).json({ error: "Invalid customer ID" });
+    if (error) {
+      return res.status(400).json({
+        error: error.message
+      });
+    }
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({
+        error: "Customer not found"
+      });
+    }
+
+    // Orders will be deleted automatically (ON DELETE CASCADE)
+    res.json({
+      message: "Customer deleted successfully. Related orders removed via cascade delete."
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: "Internal server error"
+    });
   }
-
-  res.json({ message: "Customer and related orders deleted (cascade)" });
 };
