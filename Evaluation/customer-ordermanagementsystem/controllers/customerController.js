@@ -1,14 +1,8 @@
 const supabase = require("../supabaseClient.js");
 
-/**
- * Register a new customer
- * POST /api/register
- */
 exports.registerCustomer = async (req, res) => {
   try {
     const { full_name, email, phone } = req.body;
-
-    // Check for duplicate email
     const { data: existingCustomer, error: findError } = await supabase
       .from("customers")
       .select("id")
@@ -20,8 +14,6 @@ exports.registerCustomer = async (req, res) => {
         error: "Email already registered"
       });
     }
-
-    // Insert new customer
     const { data, error } = await supabase
       .from("customers")
       .insert([
@@ -31,7 +23,7 @@ exports.registerCustomer = async (req, res) => {
           phone
         }
       ])
-      .select(); // return inserted row
+      .select();
 
     if (error) {
       return res.status(500).json({
@@ -50,11 +42,6 @@ exports.registerCustomer = async (req, res) => {
     });
   }
 };
-
-/**
- * Delete a customer (CASCADE DELETE orders)
- * DELETE /api/delete-customer/:customerId
- */
 exports.deleteCustomer = async (req, res) => {
   try {
     const { customerId } = req.params;
@@ -76,8 +63,6 @@ exports.deleteCustomer = async (req, res) => {
         error: "Customer not found"
       });
     }
-
-    // Orders will be deleted automatically (ON DELETE CASCADE)
     res.json({
       message: "Customer deleted successfully. Related orders removed via cascade delete."
     });

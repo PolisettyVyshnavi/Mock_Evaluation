@@ -3,7 +3,6 @@ const supabase = require("../supabaseClient");
 exports.addOrder = async (req, res) => {
   const { product_name, quantity, price, customerId } = req.body;
 
-  // Check customer exists
   const { data: customer } = await supabase
     .from("customers")
     .select("id")

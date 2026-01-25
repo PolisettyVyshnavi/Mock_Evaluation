@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// IMPORTANT: require must point to routes file
 const routes = require("./routes/routes.js");
 app.use("/api", routes);
 
